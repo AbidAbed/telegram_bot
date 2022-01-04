@@ -8,10 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 public class Cyber_Bot extends org.telegram.telegrambots.bots.TelegramLongPollingBot {
 
     public boolean checker(String status){
-        if(status =="/saymyname" || status == "/convert" || status =="/tellmeajoke" || status =="/chatwithme" || status =="askme" || status =="ohnoiamsmart" ||status == "/exit")
-            return false;
-        else
-            return true;
+        return status != "/saymyname" && status != "/convert" && status != "/tellmeajoke" && status != "/chatwithme" && status != "askme" && status != "ohnoiamsmart" && status != "/exit";
     }
 
     public void run(SendMessage message){
