@@ -7,17 +7,35 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 
 public class Cyber_Bot extends org.telegram.telegrambots.bots.TelegramLongPollingBot {
 
-    public boolean checker(String status){
-        return status != "/saymyname" && status != "/convert" && status != "/tellmeajoke" && status != "/chatwithme" && status != "askme" && status != "ohnoiamsmart" && status != "/exit";
+    private String extract_recived_command(Update update){
+        return update.getMessage().getText().toString();
     }
 
-    public void run(SendMessage message){
+    private Long extract_id(Update update){
+        return update.getMessage().getChatId();
+    }
+
+
+    private void send(SendMessage message) {
         try {
             execute(message);
-        }
-        catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    private void say_my_name(Update update){
+        SendMessage message=new SendMessage();
+        message.setText(update.getMessage().getFrom().getFirstName()+" :)");
+        message.setChatId(update.getMessage().getChatId().toString());
+        send(message);
+    }
+
+    private void say_your_name(Update update){
+        SendMessage message=new SendMessage();
+        message.setChatId(update.getMessage().getChatId().toString());
+        message.setText("I'm mesho karamesho :)) nice to meet you!");
+        send(message);
     }
     @Override
     public String getBotUsername() {
@@ -31,79 +49,15 @@ public class Cyber_Bot extends org.telegram.telegrambots.bots.TelegramLongPollin
 
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage message=new SendMessage();
-        //saymyname -tells you your name
-        //convert -convert hex ,dic,bin,oct
-        //beacalculator -become a calculator
-        //tellmeajoke -hahah it's a funny one
-        //chatwithme -option under developing
-        //askme -option under developing
-        //ohnoiamsmart -yes yes iam smart
-        //exit -exit from current command
-
-        //BotCommand botCommand=new BotCommand();
-
-
-        String status =update.getMessage().getText();
-
-        if(status.contains(getBotUsername()))
-            status=status.replaceAll(getBotUsername(),"");
-
-        switch (status){
-            case("/start"):
-                break;
-
-
-            case("/saymyname"):
-                message.setText(update.getMessage().getFrom().getFirstName());
-                message.setChatId(update.getMessage().getChatId().toString());
-                run(message);
-                break;
-
-
-            case("/convert"):
-                break;
-
-
-            case("/beacalculator"):
-                /*
-                message.setText("********* Calculator mode activated *********");
-                message.setChatId(update.getMessage().getChatId().toString());
-                run(message);
-                while(checker(status)){
-                    message.setText("Please enter the equation in one line : Example -> 12+10*5/90+(10*7)");
-                    message.setChatId(update.getMessage().getChatId().toString());
-                    run(message);
-                    String input =update.getMessage().getText();
-                    String output=input;
-                    //doing the calculations
-                    message.setText("Result is : "+ output+"Hit /exit to exit the current command");
-                    message.setChatId(update.getMessage().getChatId().toString());
-                    run(message);
-                    status =update.getMessage().getText();
-                }
-                ################ under developing
-                */
-                break;
-
-
-            case("/tellmeajoke"):
-                break;
-
-
-            case("/chatwithme"):
-                break;
-
-
-            case("/askme"):
-                break;
-
-
-            case("/ohnoiamsmart"):
-                break;
-
-
+        System.out.println(extract_recived_command(update));
+        String command = extract_recived_command(update);
+        switch (command){
+            case("/say_my_name"): say_my_name(update);
+            case("/say_your_name"): say_your_name(update);
+            case("/ban_member"):
+            case("/toxic_words"):
+            case("/tell_me_a_joke"):
+            case("/conversion_table"):
         }
-        System.out.print(update.getMessage().getText()+"\n");
     }
 }
